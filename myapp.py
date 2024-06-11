@@ -1,14 +1,16 @@
 from fastapi import FastAPI, HTTPException
 from pymongo import MongoClient
 from pymongo import ASCENDING
+from config import MONGO_URI, DB_NAME, DB_COLLECTION
+
 
 
 app = FastAPI()
 
 # Conexión a la base de datos MongoDB
-client = MongoClient("mongodb://localhost:27017/")
-db = client["supermamidb"]
-collection = db["smProducts"]
+client = MongoClient(MONGO_URI)
+db = client[DB_NAME]
+collection = db[DB_COLLECTION]
 
 @app.get("/items/{item_id}")
 async def read_item(item_id: str):
