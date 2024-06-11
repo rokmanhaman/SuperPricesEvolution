@@ -1,14 +1,21 @@
 from fastapi import FastAPI, HTTPException
 from pymongo import MongoClient
 from pymongo import ASCENDING
-from config import MONGO_URI, DB_NAME, DB_COLLECTION
+from urllib.parse import quote_plus
+
+from config import DB_NAME, DB_COLLECTION, DB_USER, DB_USER_PASS, DB_HOST, DB_PORT
 
 
 
 app = FastAPI()
 
 # Conexión a la base de datos MongoDB
-client = MongoClient(MONGO_URI)
+escaped_user = quote_plus(DB_USER)
+escaped_pass = quote_plus(DB_USER_PASS)
+
+connection_url = f"mongodb://{escaped_user}:{escaped_pass}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
+client = MongoClient(connection_url)
 db = client[DB_NAME]
 collection = db[DB_COLLECTION]
 
