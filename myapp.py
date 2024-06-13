@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Path
 from pymongo import MongoClient
 from pymongo import ASCENDING
 from urllib.parse import quote_plus
@@ -20,7 +20,7 @@ db = client[DB_NAME]
 collection = db[DB_COLLECTION]
 
 @app.get("/items/{item_id}")
-async def read_item(item_id: str):
+async def read_item(item_id: str = Path(..., min_length=7, max_length=7, description="un id de ejemplo es 3390322")):
     # Buscar los items en la colección que coincidan con el ID
     items = collection.find({"prod_id": item_id}).sort("date", ASCENDING)
     
